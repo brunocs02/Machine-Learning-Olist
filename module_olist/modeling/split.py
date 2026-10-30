@@ -1,5 +1,5 @@
-import pandas as pd
 from sklearn.model_selection import train_test_split
+import pandas as pd
 
 FEATURES = ["purchase_hour", "purchase_month",  "purchase_weekday", "item_count", "promised_days", "seller_count", "total_price", "total_freight", "customer_state"]
 
