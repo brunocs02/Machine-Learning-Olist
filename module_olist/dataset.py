@@ -34,11 +34,11 @@ def load_data(orders_path: Path, items_path: Path, customers_path: Path) -> tupl
 
 def save_dataset(dataset: pd.DataFrame, output_path: Path) -> None:
     """
-    Salva o dataframe em .csv no caminho indicado
+    Saves the dataset as a .csv file
 
     Args:
-        dataset: dataframe a ser salvo
-        output_path: caminho onde salvar o arquivo
+        dataset: dataframe to be saved
+        output_path: path to create the file
     """
     dataset.to_csv(output_path, index=False)
     logger.success(f"Dataset salvo em: {output_path}")

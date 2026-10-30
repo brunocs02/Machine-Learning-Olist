@@ -70,7 +70,8 @@ def create_lightgbm_pipeline() -> Pipeline:
     model = LGBMClassifier(n_estimators=100, #número de árvores
             learning_rate=0.1,
             max_depth=3, #profundidade das árvores
-            random_state=42)
+            random_state=42,
+            verbosity = -1)
     
     return Pipeline(
         steps=[("preprocessor", preprocessor), 

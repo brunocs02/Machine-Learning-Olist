@@ -1,34 +1,39 @@
 import numpy as np
 from loguru import logger
-from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score, average_precision_score
 
-def evaluate_models(models, X_test, y_test):
+def evaluate_model(model, name, threshold, X_test, y_test):
 
-    for name, model in models.items():
-        y_proba = model.predict_proba(X_test)[:,1]
+    """
+    Final model evaluation
+    using test sets
+    """
 
-        best_threshold = None
-        best_f1 = -1
-        best_precision = None
-        best_recall = None
+    y_proba = model.predict_proba(X_test)[:,1]
 
-        for threshold in np.range(0.05, 0.5, 0.01):
-            y_pred = (y_proba>=0.05).astype(int)
-            precision = precision_score(y_test, y_pred)
-            recall = recall_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred)
+    best_threshold = threshold
+    best_f1 = -1
+    best_precision = None
+    best_recall = None
 
-            if f1 > best_f1:
-                best_f1 = f1
-                best_threshold = threshold
-                best_precision = precision
-                best_recall = recall
+    y_pred = (y_proba>=threshold).astype(int)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, y_proba)
+    pr_auc = average_precision_score(y_test, y_proba)
 
-        roc_auc = roc_auc_score(y_test, y_pred)
+    best_f1 = f1
+    best_threshold = threshold
+    best_precision = precision
+    best_recall = recall
 
-        logger.info(f"Model: {name}")
-        logger.info(f"Best threshold {best_threshold:.2f}")
-        logger.info(f"Precision {best_precision:.3f}")
-        logger.info(f"Recall {best_recall:.3f}")
-        logger.info(f"F1: {best_f1:.3f}")
-        logger.info(f"ROC-AUC: {roc_auc:.3f}")
+    
+
+    logger.info(f"Model: {name}")
+    logger.info(f"Best threshold {best_threshold:.2f}")
+    logger.info(f"Precision {best_precision:.3f}")
+    logger.info(f"Recall {best_recall:.3f}")
+    logger.info(f"F1: {best_f1:.3f}")
+    logger.info(f"ROC-AUC: {roc_auc:.3f}")
+    logger.info(f"PR-AUC: {pr_auc:.3f}")
